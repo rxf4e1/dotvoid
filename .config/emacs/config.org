@@ -1276,19 +1276,16 @@
 *** Denote
 #+begin_src emacs-lisp :tangle yes
   (elpaca denote)
-
   (custom-set-variables
-   '(denote-directory "~/Documents/denote")
+   '(denote-directory "~/documents/denote")
    '(denote-rename-buffer-mode t)
    '(denote-infer-keywords t)
    '(denote-sort-keywords t)
    '(denote-backlinks-show-context t)
-   '(denote-known-keywords '("nixos" "code" "work"))
+   '(denote-known-keywords '("code" "work"))
    '(denote-file-type nil))
-
   (add-hook 'find-file-hook 'denote-link-buttonize-buffer)
   (add-hook 'dired-mode-hook 'denote-dired-mode)
-
   (my-leader-def
     :keymaps 'global-map
     "n j" #'my-denote-journal
@@ -1326,6 +1323,15 @@
 #+end_src
 
 *** Epub/Pdf
+#+begin_src emacs-lisp :tangle no
+  (elpaca nov)
+
+  (elpaca pdf-tools)
+  (custom-set-variables
+   '(pdf-view-midnight-colors '("white smoke" . "gray5"))
+   '(pdf-view-display-size 'fit-page))
+#+end_src
+
 * Custom
 #+begin_src emacs-lisp :tangle yes
   ;; (setq custom-file (expand-file-name "customs.el" user-emacs-directory))
