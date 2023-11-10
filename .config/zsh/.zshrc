@@ -1,8 +1,9 @@
 #!/usr/bin/env zsh
 
 ##### BINDING STYLE
-bindkey -v
-export KEYTIMEOUT=1
+# bindkey -v
+# export KEYTIMEOUT=1
+bindkey -e
 
 ##### SET OPTIONS
 setopt globdots
