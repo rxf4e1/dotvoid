@@ -28,5 +28,4 @@ alias reboot="doas shutdown -r now"
 alias poweroff="doas poweroff"
 alias x="${HOME}/.local/bin/start-river"
 
-# alias gdot="$(which git) --git-dir=$HOME/.repo/dotvoid/ --work-tree=$HOME"
 alias dtf="$(which git) --git-dir=${HOME}/.repo/dotvoid --work-tree=${HOME}"
