@@ -1,0 +1,44 @@
+# set sandbox strict
+set recolor "true"
+
+set recolor-lightcolor "#01180B"
+set recolor-darkcolor "#2AEA7D"
+
+set default-bg "#01180B"
+
+# set font "GohuFont uni14 Nerd Font Propo 12"
+
+# gui options
+set guioptions none
+
+set statusbar-fg "#2AEA7D"
+set statusbar-bg "#0B2817"
+
+set inputbar-bg "#01180B"
+set inputbar-fg "#2AEA7D"
+
+# Where 'recent files, files'
+set completion-group-bg "#0B2817"
+set completion-group-fg "#2AEA7D"
+set completion-bg "#01180B"
+set completion-fg "#2AEA7D"
+set completion-highlight-bg "#2AEA7D"
+set completion-highlight-fg "#0A110D"
+
+set highlight-active-color "#7DEA2A"
+set highlight-color "#2AEA7D"
+
+set notification-bg "#01180B"
+set notification-fg "#2AEA7D"
+
+set notification-error-bg "#E64343"
+set notification-error-fg "#2AEA7D"
+
+set notification-warning-bg "#7DEA2A"
+set notification-warning-fg "#01180B"
+
+# When you press TAB while doc is open
+set index-bg "#011808"
+set index-fg "#2AEA7D"
+set index-active-bg "#2AEA7D"
+set index-active-fg "#01180B"
