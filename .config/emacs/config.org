@@ -414,11 +414,23 @@
   (advice-add #'register-preview :override #'consult-register-window)
 
   (general-def global-map
-   "C-x b" #'consult-buffer
-   "M-g g" #'consult-line
-   "C-M-l" #'consult-imenu)
+    "C-x b" #'consult-buffer
+    "M-y"   #'consult-yank-pop
+    "M-g e" #'consult-compile-error
+    "M-g f" #'consult-flymake
+    "M-g g" #'consult-goto-line
+    "M-g i" #'consult-imenu
+    "M-g I" #'consult-imenu-multi
+    "M-g o" #'consult-outline
+    "M-s d" #'consult-find
+    "M-s e" #'consult-isearch-history
+    "M-s g" #'consult-git-grep
+    "M-s l" #'consult-line
+    "M-s L" #'consult-line-multi
+    "M-s r" #'consult-ripgrep)
+
   (general-def minibuffer-local-map
-   "C-r" #'consult-history)
+   "M-r" #'consult-history)
 #+end_src
 
 **** Embark
@@ -568,6 +580,17 @@
 
 #+end_src
 
+**** Mono-Complete
+#+begin_src emacs-lisp :tangle no
+  (elpaca mono-complete)
+
+  (custom-set-variables
+   '(mono-complete-fallback-command 'tab-to-tab-stop)
+   '(mono-complete-backend-capf-complete-fn 'eglot))
+  (general-def mono-complete-mode-map "<tab>" #'mono-complete-expand-or-fallback)
+  (add-hook 'prog-mode-hook #'mono-complete-mode)
+#+end_src
+
 **** Snippets
 ***** Skeleton
 #+begin_src emacs-lisp :tangle yes
@@ -708,7 +731,9 @@
   (general-def global-map
     "C-a" #'crux-move-beginning-of-line
     "C-x 4 t" #'crux-transpose-windows
-    "C-k" #'crux-kill-whole-line)
+    "C-k" #'crux-kill-whole-line
+    "C-o" #'crux-smart-open-line-above
+    "C-j" #'crux-smart-open-line)
   (my-leader-def global-map
     "c ;" #'crux-duplicate-and-comment-current-line-or-region
     "c c" #'crux-cleanup-buffer-or-region
@@ -716,8 +741,7 @@
     "c f" #'crux-recentf-find-file
     "c F" #'crux-recentf-find-directory
     "c k" #'crux-kill-other-buffers
-    "c r" #'crux-reopen-as-root-mode
-    "c o" #'crux-smart-open-line-above)
+    "c r" #'crux-reopen-as-root-mode)
 #+end_src
 
 *** Dired
@@ -739,7 +763,7 @@
    '(dired-dwim-target t)
    '(dired-subtree-use-backgrounds nil))
 
-  (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+  ;; (add-hook 'dired-mode-hook #'dired-hide-details-mode)
   (add-hook 'dired-mode-hook #'hl-line-mode)
 
   (global-unset-key (kbd "C-x d"))
@@ -838,7 +862,8 @@
   (elpaca meow
     (require 'meow)
     (meow-setup)
-    (meow-global-mode 1))
+    ;; (meow-global-mode t)
+    )
 
   (defun meow-setup ()
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
@@ -993,9 +1018,6 @@
               (eshell/alias "clear" "rx/eshell-clear")))
 
   (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode)
-
-  (general-def global-map
-    "C-M-<return>" #'eshell)
 #+end_src
 
 **** Eat
@@ -1015,7 +1037,23 @@
 
   (add-hook 'eshell-load-hook #'eat-eshell-mode)
   ;; (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
+#+end_src
 
+**** vTerm
+#+begin_src emacs-lisp :tangle yes
+  (elpaca vterm)
+#+end_src
+
+**** Pop-shell
+#+begin_src emacs-lisp :tangle yes
+  (elpaca shell-pop
+    (require 'shell-pop)
+    (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type))
+  (setq shell-pop-shell-type
+        (quote ("vterm" "*vterm*" (lambda nil
+                                            (vterm shell-pop-term-shell)))))
+  (setq shell-pop-term-shell "/bin/zsh")
+  (general-def global-map "C-s-<return>" #'shell-pop)
 #+end_src
 
 *** Vundo
@@ -1323,7 +1361,7 @@
 #+end_src
 
 *** Epub/Pdf
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (elpaca nov)
 
   (elpaca pdf-tools)
