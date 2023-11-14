@@ -41,11 +41,11 @@
   ;; text properties severely bloat the history so delete them (courtesy of PythonNut)
   (defun unpropertize-savehist ()
     (mapc (lambda (list)
-	    (with-demoted-errors
-		(when (boundp list)
-		  (set list (mapcar #'substring-no-properties (eval list))))))
-	  '(kill-ring minibuffer-history helm-grep-history helm-ff-history file-name-history
-		      read-expression-history extended-command-history)))
+            (with-demoted-errors
+                (when (boundp list)
+                  (set list (mapcar #'substring-no-properties (eval list))))))
+          '(kill-ring minibuffer-history helm-grep-history helm-ff-history file-name-history
+                      read-expression-history extended-command-history)))
   (add-hook 'kill-emacs-hook    #'unpropertize-savehist)
   (add-hook 'savehist-save-hook #'unpropertize-savehist)
 #+end_src
@@ -310,7 +310,7 @@
 #+end_src
 
 **** iComplete
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (icomplete-mode 1)
   (custom-set-variables
    '(icomplete-separator " • ")
@@ -343,7 +343,7 @@
 
 **** Brotherhood
 ***** Vertico
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (elpaca (vertico
            :host      github
            :files    
@@ -354,7 +354,7 @@
   (custom-set-variables
    '(vertico-cycle t)
    '(vertico-scroll-margin 2)
-   '(vertico-count 8)
+   '(vertico-count 5)
    '(vertico-resize nil))
 
   (general-define-key
@@ -414,20 +414,21 @@
   (advice-add #'register-preview :override #'consult-register-window)
 
   (general-def global-map
-    "C-x b" #'consult-buffer
-    "M-y"   #'consult-yank-pop
-    "M-g e" #'consult-compile-error
-    "M-g f" #'consult-flymake
-    "M-g g" #'consult-goto-line
-    "M-g i" #'consult-imenu
-    "M-g I" #'consult-imenu-multi
-    "M-g o" #'consult-outline
-    "M-s d" #'consult-find
-    "M-s e" #'consult-isearch-history
-    "M-s g" #'consult-git-grep
-    "M-s l" #'consult-line
-    "M-s L" #'consult-line-multi
-    "M-s r" #'consult-ripgrep)
+    "C-x b"   #'consult-buffer
+    "C-x C-r" #'consult-recent-file
+    "M-y"     #'consult-yank-pop
+    "M-g e"   #'consult-compile-error
+    "M-g f"   #'consult-flymake
+    "M-g g"   #'consult-goto-line
+    "M-g i"   #'consult-imenu
+    "M-g I"   #'consult-imenu-multi
+    "M-g o"   #'consult-outline
+    "M-s d"   #'consult-find
+    "M-s e"   #'consult-isearch-history
+    "M-s g"   #'consult-git-grep
+    "M-s l"   #'consult-line
+    "M-s L"   #'consult-line-multi
+    "M-s r"   #'consult-ripgrep)
 
   (general-def minibuffer-local-map
    "M-r" #'consult-history)
@@ -761,7 +762,9 @@
    '(dired-recursive-deletes 'always)
    '(delete-by-moving-to-trash t)
    '(dired-dwim-target t)
-   '(dired-subtree-use-backgrounds nil))
+   '(dired-subtree-use-backgrounds nil)
+   '(dired-guess-shell-alist-user
+     '(("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "ffplay" "xdg-open"))))
 
   ;; (add-hook 'dired-mode-hook #'dired-hide-details-mode)
   (add-hook 'dired-mode-hook #'hl-line-mode)
@@ -831,6 +834,11 @@
    "g s" #'magit-status)
 #+end_src
 
+*** TODO Hydra
+ #+begin_src emacs-lisp :tangle no
+ 
+ #+end_src
+ 
 *** iSearch
 #+begin_src emacs-lisp :tangle yes
   (custom-set-variables
@@ -858,12 +866,11 @@
 
 *** Modal
 **** Meow
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (elpaca meow
     (require 'meow)
     (meow-setup)
-    ;; (meow-global-mode t)
-    )
+    (meow-global-mode t))
 
   (defun meow-setup ()
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
@@ -959,13 +966,35 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 #+end_src
 
-**** Smartparens
+**** Electric & Puni
 #+begin_src emacs-lisp :tangle yes
-  (elpaca smartparens
-    (require 'smartparens-config)
-    (smartparens-global-mode 1))
+  ;; (elpaca smartparens
+  ;;   (require 'smartparens-config)
+  ;;   (smartparens-global-mode 1))
+  ;; (custom-set-variables '(smartparens-strict-mode nil))
+
+  ;; https://github.com/AmaiKinono/puni
+  (elpaca puni
+    (require 'puni)
+    (puni-global-mode 1))
+  (add-hook 'vterm-mode-hook #'puni-disable-puni-mode)
+
+  (electric-pair-mode t)
+  (electric-indent-mode t)
+  (electric-quote-mode nil)
   (custom-set-variables
-   '(smartparens-strict-mode nil))
+   '(show-paren-style 'parenthesis)
+   '(show-paren-when-point-in-periphery nil)
+   '(show-paren-when-point-inside-paren nil)
+   '(electric-pair-preserve-balance t)
+   '(electric-pair-skip-whitespace nil)
+   '(electric-pair-skip-self 'electric-pair-default-skip-self)
+   '(electric-pair-skip-whitespace-chars '(9 10 32))
+   '(electric-pair-pairs
+     '((34   . 34)
+       (8216 . 8217)
+       (8220 . 8221)
+       (171  . 187))))
 #+end_src
 
 *** Projects
@@ -1022,10 +1051,6 @@
 
 **** Eat
 #+begin_src emacs-lisp :tangle yes
-  ;; (elpaca vterm)
-  ;; (general-def global-map
-  ;;   "C-M-<return>" #'vterm-other-window)
-
   (elpaca (eat :type git
          :host codeberg
          :repo "akib/emacs-eat"
@@ -1049,11 +1074,19 @@
   (elpaca shell-pop
     (require 'shell-pop)
     (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type))
-  (setq shell-pop-shell-type
-        (quote ("vterm" "*vterm*" (lambda nil
-                                            (vterm shell-pop-term-shell)))))
-  (setq shell-pop-term-shell "/bin/zsh")
-  (general-def global-map "C-s-<return>" #'shell-pop)
+
+  (custom-set-variables
+   '(shell-pop-autocd-to-working-dir t)
+   '(shell-pop-restore-window-configuration t)
+   '(shell-pop-cleanup-buffer-at-process-exit t)
+   '(shell-pop-window-size 30)
+   '(shell-pop-full-span t)
+   '(shell-pop-window-position "bottom")
+   '(shell-pop-term-shell "/usr/bin/zsh")
+   '(shell-pop-shell-type (quote ("vterm" "*vterm*" (lambda nil
+                                                      (vterm shell-pop-term-shell))))))
+
+  (general-def global-map "s-<return>" #'shell-pop)
 #+end_src
 
 *** Vundo
@@ -1093,7 +1126,7 @@
   (general-define-key
    :keymaps 'global-map
    [remap other-window] #'ace-window
-   "s-o" #'ace-window
+   "M-o" #'ace-window
    "C-;" #'avy-goto-char
    "C-:" #'avy-goto-word-or-subword-1)
 #+end_src
@@ -1127,42 +1160,47 @@
 
 **** Placing
 #+begin_src emacs-lisp :tangle yes
-  (customize-set-variable
-   'display-buffer-alist
-   '(("\\*e?shell\\*"
-      (display-buffer-in-side-window)
-      (window-height . 0.3)
-      (side . bottom)
-      (slot . 1))
-     ("\\*\\(ansi-term\\|vterm\\)\\*"
-      (display-buffer-in-side-window)
-      (window-width . 0.45)
-      (side . right)
-      (slot . 1))
-     ("\\*[Hh]elp\\|[Mm]etahelp\\*"
-      (display-buffer-in-side-window)
-      (window-height . 0.25)
-      (side . bottom)
-      (slot . 1))
-     ("\\*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\)\\*"
-      (display-buffer-in-side-window)
-      (window-height . 0.25)
-      (side . bottom)
-      (slot . 0))
-     ("\\*Faces\\*"
-      (display-buffer-in-side-window)
-      (window-height . 0.25)
-      (side . bottom)
-      (slot . 1))
-     ("\\*contents\\*"
-      (display-buffer-in-side-window)
-      (window-height . 0.25)
-      (side . bottom)
-      (slot . 2))))
+  (custom-set-variables
+   '(display-buffer-alist
+     '(("\\*e?shell\\*"
+        (display-buffer-in-side-window)
+        (window-height . 0.3)
+        (side . bottom)
+        (slot . 1))
+       ("\\*.*\\(v?term\\).*"
+        (display-buffer-in-side-window)
+        (window-width . 0.45)
+        (side . right)
+        (slot . 1))
+       ("\\*.*\\([Hh]elp\\|[Mm]etahelp\\).*"
+        (display-buffer-in-side-window)
+        (window-height . 0.25)
+        (side . bottom)
+        (slot . 1))
+       ("\\*.*\\(Backtrace\\|Warnings\\|Compile-Log\\|Messages\\).*"
+        (display-buffer-in-side-window)
+        (window-height . 0.25)
+        (side . bottom)
+        (slot . 0))
+       ("\\*.*\\(Faces\\).*"
+        (display-buffer-in-side-window)
+        (window-height . 0.25)
+        (side . bottom)
+        (slot . 1))
+       ("\\*.*\\(contents\\).*"
+        (display-buffer-in-side-window)
+        (window-height . 0.25)
+        (side . bottom)
+        (slot . 2)))))
 #+end_src
 
 ** Code
 *** Langs
+**** C
+#+begin_src emacs-lisp :tangle no
+
+#+end_src
+
 **** Lua
 #+begin_src emacs-lisp :tangle yes
   (elpaca lua-mode)
@@ -1211,7 +1249,7 @@
 #+end_src
 
 *** Modes
-**** Ba(sh)
+**** Sh-mode
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'auto-mode-alist '("\\.sh\\’" . sh-mode))
   (add-hook 'sh-mode-hook 'eglot-ensure)
@@ -1231,7 +1269,7 @@
 #+end_src
 
 **** Nix
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (elpaca nix-mode)
   (add-to-list 'auto-mode-alist '("\\.nix\\’" . nix-mode))
   (with-eval-after-load 'eglot
@@ -1267,7 +1305,7 @@
 #+begin_src emacs-lisp :tangle yes
   (elpaca org-contrib)
   (custom-set-variables
-   '(org-directory "~/doc/org/")
+   '(org-directory "~/documents/org/")
    '(org-startup-with-inline-images (display-graphic-p))
    '(org-startup-align-all-tables t)
    '(org-use-speed-commands t)
@@ -1363,11 +1401,13 @@
 *** Epub/Pdf
 #+begin_src emacs-lisp :tangle yes
   (elpaca nov)
-
   (elpaca pdf-tools)
   (custom-set-variables
-   '(pdf-view-midnight-colors '("white smoke" . "gray5"))
+   ;; '(pdf-view-midnight-colors '("white smoke" . "gray5"))
+   '(pdf-view-midnight-colors '("#ff9900" . "#0a0a12"))
    '(pdf-view-display-size 'fit-page))
+  (add-hook 'pdf-view-mode-hook 'pdf-view-midnight-minor-mode)
+
 #+end_src
 
 * Custom
