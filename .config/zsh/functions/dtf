@@ -1,5 +1,20 @@
 #!/usr/bin/env zsh
 
+BRANCH="main"
+REPO="git@github.com:rxf4e1/dotvoid.git"
+
 dtf() {
     git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
+}
+
+dtfa() { 
+    dtf add "$@" 
+}
+
+dtfc() { 
+    dtf commit -m "$@" 
+}
+
+dtfp() { 
+    dtf push "$REPO" "$BRANCH" 
 }
