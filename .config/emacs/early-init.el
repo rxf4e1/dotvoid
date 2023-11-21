@@ -47,8 +47,7 @@
      (when (boundp 'after-focus-change-function)
        (add-function :after after-focus-change-function #'+gc-after-focus-change)))))
 
-(with-eval-after-load 'elpaca
-  (add-hook 'elpaca-after-init-hook '+reset-init-values))
+(add-hook 'elpaca-after-init-hook '+reset-init-values)
 
 (setq frame-resize-pixelwise t
       frame-inhibit-implied-resize t
@@ -64,9 +63,12 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
-(push '(font . "Terminess Nerd Font Mono-9") default-frame-alist)
-(set-face-font 'default "Terminess Nerd Font Mono-9")
-(set-face-font 'variable-pitch "Terminess Nerd Font Mono-9")
+(push '(font . "terminus-9") default-frame-alist)
+(set-face-font 'default "terminus-9")
+(set-face-font 'variable-pitch "terminus-9")
+;; (push '(font . "JetBrains Mono-8") default-frame-alist)
+;; (set-face-font 'default "JetBrains Mono-8")
+;; (set-face-font 'variable-pitch "JetBrains Mono-8")
 (copy-face 'default 'fixed-pitch)
 
 (setq server-client-instructions nil)

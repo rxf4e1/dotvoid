@@ -28,5 +28,5 @@ alias reboot="doas shutdown -r now"
 alias poweroff="doas poweroff"
 alias x="${HOME}/.local/bin/start-river"
 
-alias dtf="$(which git) --git-dir=${HOME}/.repo/dotvoid --work-tree=${HOME}"
+# alias dtf="$(which git) --git-dir=${HOME}/.repo/dotvoid --work-tree=${HOME}"
 alias dtfpush="dtf push git@github.com:rxf4e1/dotvoid.git main"

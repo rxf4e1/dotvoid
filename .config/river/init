@@ -16,10 +16,10 @@ mod=Mod4
 #################################################
 # APPEARANCE
 #################################################
-riverctl background-color 0x000000
-riverctl border-color-focused 0xAFFF00
-riverctl border-color-unfocused 0x8A8A8A
-riverctl border-width 2
+riverctl background-color 0x002B36
+riverctl border-color-focused 0x586E75
+riverctl border-color-unfocused 0x073642
+riverctl border-width 1
 riverctl xcursor-theme Breeze_Hacked
 
 gsettings set org.gnome.desktop.interface gtk-theme Adwaita
@@ -27,8 +27,8 @@ gsettings set org.gnome.desktop.interface icon-theme Breeze
 gsettings set org.gnome.desktop.interface cursor-theme Breeze_Hacked
 gsettings set org.gnome.desktop.wm.preferences button-layout ""
 
-find "${HOME}/Pictures/wallpaper/" -type f | shuf -n1 | read WALLPAPER
-spawn_once swaybg -m fill -i "${WALLPAPER}"
+# find "${HOME}/Pictures/wallpaper/" -type f | shuf -n1 | read WALLPAPER
+# spawn_once swaybg -m fill -i "${WALLPAPER}"
 # spawn_once swaybg -m fill -i /usr/share/void-artwork/splash.png
 
 #################################################
@@ -50,12 +50,11 @@ done
 #################################################
 # LAUNCHY-KEYBINDS
 #################################################
-riverctl map normal Super Return spawn "wezterm start zellij -l compact"
 riverctl map normal Super+Shift Return spawn "foot --app-id=float"
-riverctl map normal Super Q spawn "foot --app-id=float broot -s"
-riverctl map normal Mod5 P spawn "fuzzel.sh"
+riverctl map normal Super Q spawn "foot"
+riverctl map normal Mod5 P spawn "fuzzel"
 riverctl map normal Super+Shift R spawn $HOME/.config/river/init
-riverctl map normal Super E spawn 'emacsclient -c -a ""'
+riverctl map normal Super E spawn "emw"
 
 #################################################
 # WINDOW-MANAGEMENT
@@ -186,7 +185,7 @@ riverctl csd-filter-remove app-id rmacs
 #################################################
 spawn_once mako
 spawn_once kanshi
-# spawn_once "foot --server"
+spawn_once "foot --server"
 spawn_once "wlsunset -l -23.6 -L -43.5"
 spawn_once "dbus-run-session pipewire"
 notify-send -t 2001 "Hack The World!"
