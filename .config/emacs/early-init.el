@@ -63,9 +63,9 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
-(push '(font . "terminus-9") default-frame-alist)
-(set-face-font 'default "terminus-9")
-(set-face-font 'variable-pitch "terminus-9")
+(push '(font . "termsyn-9") default-frame-alist)
+(set-face-font 'default "termsyn-9")
+(set-face-font 'variable-pitch "termsyn-9")
 ;; (push '(font . "JetBrains Mono-8") default-frame-alist)
 ;; (set-face-font 'default "JetBrains Mono-8")
 ;; (set-face-font 'variable-pitch "JetBrains Mono-8")

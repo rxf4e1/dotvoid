@@ -1,7 +1,6 @@
 #!/usr/bin/zsh
 
 # Aliases
-
 alias ls="lsd"
 alias la="ls --long --all --no-symlink"
 alias ll="ls --long"
@@ -28,5 +27,5 @@ alias reboot="doas shutdown -r now"
 alias poweroff="doas poweroff"
 alias x="${HOME}/.local/bin/start-river"
 
-# alias dtf="$(which git) --git-dir=${HOME}/.repo/dotvoid --work-tree=${HOME}"
+alias dtf="$(which git) --git-dir=${HOME}/.dotfiles --work-tree=${HOME}"
 alias dtfpush="dtf push git@github.com:rxf4e1/dotvoid.git main"
